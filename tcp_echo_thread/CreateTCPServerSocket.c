@@ -17,7 +17,7 @@ int CreateTCPServerSocket(unsigned short port) {
   /* Construct local address structure */
   memset(&echoServAddr, 0, sizeof(echoServAddr)); /* Zero out structure */
   echoServAddr.sin_family = AF_INET;              /* Internet address family */
-  echoServAddr.sin_addr.s_addr = htonl(INADDR_ANY); /* Any incoming interface */
+  echoServAddr.sin_addr.s_addr = inet_addr("127.0.0.1"); /* Any incoming interface */
   echoServAddr.sin_port = htons(port);              /* Local port */
 
   /* Bind to the local address */
