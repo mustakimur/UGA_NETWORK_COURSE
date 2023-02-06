@@ -1,0 +1,18 @@
+FROM ubuntu
+
+RUN apt-get update && apt-get install -y python3-pip \
+    sudo \
+    tcpdump \
+    apache2 \
+    apache2-utils \
+    bmon
+
+RUN pip3 install scapy
+
+ADD "scripts/sniffer" "sniffer"
+
+RUN chmod a+x sniffer
+
+EXPOSE 80
+
+ENTRYPOINT ["sudo","python3","sniffer"]
