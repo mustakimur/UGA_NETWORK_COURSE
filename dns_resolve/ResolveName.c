@@ -1,15 +1,32 @@
-#include <netdb.h>  /* for gethostbyname() */
-#include <stdio.h>  /* for fprintf() */
-#include <stdlib.h> /* for exit() */
+/* for inet_ntoa() */
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 
-unsigned long ResolveName(char name[]) {
-  struct hostent *host; /* Structure containing host information */
+#include <netdb.h>
 
-  if ((host = gethostbyname(name)) == NULL) {
-    fprintf(stderr, "gethostbyname() failed");
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv) {
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s hostname\n", argv[0]);
     exit(1);
   }
 
-  /* Return the binary, network byte ordered address */
-  return *((unsigned long *)host->h_addr_list[0]);
+  struct hostent *hp = gethostbyname(argv[1]);
+
+  if (hp == NULL) {
+    fprintf(stderr, "gethostbyname() failed\n");
+    exit(1);
+  } else {
+    printf("%s = ", hp->h_name);
+    unsigned int i = 0;
+    while (hp->h_addr_list[i] != NULL) {
+      printf("%s ", inet_ntoa(*(struct in_addr *)(hp->h_addr_list[i])));
+      i++;
+    }
+    printf("\n");
+    exit(0);
+  }
 }

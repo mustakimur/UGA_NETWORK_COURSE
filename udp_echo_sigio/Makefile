@@ -3,3 +3,6 @@ server:
 
 client:
 	gcc -o UDPEchoClient UDPEchoClient-Timeout.c DieWithError.c
+
+other:
+	gcc -o Sample SigAction.c DieWithError.c

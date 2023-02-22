@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
   alarm(TIMEOUT_SECS); /* Set the timeout */
   while ((respStringLen = recvfrom(sock, echoBuffer, ECHOMAX, 0,
                                    (struct sockaddr *)&fromAddr, &fromSize)) <
-         0)
+         0) {
     if (errno == EINTR) /* Alarm went off  */
     {
       if (tries < MAXTRIES) /* incremented by signal handler */
@@ -93,6 +93,7 @@ int main(int argc, char *argv[]) {
         DieWithError("No Response");
     } else
       DieWithError("recvfrom() failed");
+  }
 
   /* recvfrom() got something --  cancel the timeout */
   alarm(0);

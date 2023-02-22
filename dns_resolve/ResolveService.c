@@ -1,22 +1,30 @@
-#include <netdb.h>      /* for getservbyname() */
-#include <netinet/in.h> /* for htons() */
-#include <stdio.h>      /* for printf() and fprintf() */
-#include <stdlib.h>     /* for atoi() */
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+int main(int argc, char *argv[]) {
+  struct servent *serv;
 
-unsigned short ResolveService(char service[], char protocol[]) {
-  struct servent *serv; /* Structure containing service information */
-  unsigned short port;  /* Port to return */
+  if (argc < 3) {
+    puts("Incorrect parameters. Use:");
+    puts("   gsbnm service-name protocol-name");
+    return EXIT_FAILURE;
+  }
 
-  if ((port = atoi(service)) == 0) /* Is port numeric? */
-  {
-    /* Not numeric.  Try to find as name */
-    if ((serv = getservbyname(service, protocol)) == NULL) {
-      fprintf(stderr, "getservbyname() failed");
-      exit(1);
-    } else
-      port = serv->s_port; /* Found port (network byte order) by name */
-  } else
-    port = htons(port); /* Convert port to network byte order */
+  /* getservbyname() - opens the etc.services file and returns the */
+  /* values for the requested service and protocol.                */
 
-  return port;
+  serv = getservbyname(argv[1], argv[2]);
+  if (serv == NULL) {
+    printf("Service %s not found for protocol %s\n", argv[1], argv[2]);
+    return EXIT_FAILURE;
+  }
+
+  /* Print it. */
+  printf("Name: %-15s  Port: %5d    Protocol: %-6s\n", serv->s_name,
+         ntohs(serv->s_port), serv->s_proto);
+  return EXIT_SUCCESS;
 }
