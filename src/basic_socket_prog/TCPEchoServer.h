@@ -5,7 +5,7 @@
 #include <string.h>     /* for memset() */
 #include <unistd.h>     /* for close() */
 
-void DieWithError(char *errorMessage);  /* Error handling function */
-void HandleTCPClient(int clntSocket);   /* TCP client handling function */
+void DieWithError(char *errorMessage); /* Error handling function */
+void HandleTCPClient(int clntSocket);  /* TCP client handling function */
 int CreateTCPServerSocket(unsigned short port); /* Create TCP server socket */
-int AcceptTCPConnection(int servSock);  /* Accept TCP connection request */
+int AcceptTCPConnection(int servSock); /* Accept TCP connection request */
