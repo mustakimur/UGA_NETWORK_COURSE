@@ -1,44 +1,52 @@
 version: "3.8"
+name: CompNetwork
 
 services:
-  client1:
+  project:
     build:
       context: .
       dockerfile: Dockerfile
-    image: mustakim/network:1.0
-    container_name: client1
-    networks:
-      my_custom_network:
-        ipv4_address: 192.168.1.100
-    stdin_open: true
-    tty: true
-
-  client2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: mustakim/network:1.0
-    container_name: client2
-    networks:
-      my_custom_network:
-        ipv4_address: 192.168.1.101
-    stdin_open: true
-    tty: true
+    image: mustakimur/compnetwork:1.0
 
   server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: mustakim/network:1.0
+    image: mustakimur/compnetwork:1.0
     container_name: server
+    volumes:
+      - ./src:/home
     networks:
-      my_custom_network:
+      project_network:
         ipv4_address: 192.168.1.102
     stdin_open: true
     tty: true
 
+  client1:
+    image: mustakimur/compnetwork:1.0
+    container_name: client1
+    volumes:
+      - ./src:/home
+    networks:
+      project_network:
+        ipv4_address: 192.168.1.100
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
+  client2:
+    image: mustakimur/compnetwork:1.0
+    container_name: client2
+    volumes:
+      - ./src:/home
+    networks:
+      project_network:
+        ipv4_address: 192.168.1.101
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
 networks:
-  my_custom_network:
+  project_network:
     driver: bridge
     ipam:
       config:
