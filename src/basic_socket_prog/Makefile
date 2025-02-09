@@ -1,3 +1,5 @@
+all: server client
+
 server:
 	gcc -o TCPEchoServer TCPEchoServer.c DieWithError.c HandleTCPClient.c
 
