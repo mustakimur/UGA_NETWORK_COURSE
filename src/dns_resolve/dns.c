@@ -364,8 +364,8 @@ void get_dns_servers() {
     }
   }
 
-  strcpy(dns_servers[0], "208.67.222.222");
-  strcpy(dns_servers[1], "208.67.220.220");
+  strcpy(dns_servers[0], "8.8.8.8");
+  strcpy(dns_servers[1], "1.1.1.1");
 }
 
 /*

@@ -35,10 +35,11 @@ int main(int argc, char *argv[]) {
     DieWithError("socket() failed");
 
   /* Set up the server address structure */
-  memset(&echoServAddr, 0, sizeof(echoServAddr));   /* Zero out structure */
-  echoServAddr.sin_family = AF_INET;                /* Internet family */
-  echoServAddr.sin_addr.s_addr = htonl(INADDR_ANY); /* Any incoming interface */
-  echoServAddr.sin_port = htons(echoServPort);      /* Port */
+  memset(&echoServAddr, 0, sizeof(echoServAddr)); /* Zero out structure */
+  echoServAddr.sin_family = AF_INET;              /* Internet family */
+  echoServAddr.sin_addr.s_addr =
+      inet_addr("192.168.1.102");              /* Any incoming interface */
+  echoServAddr.sin_port = htons(echoServPort); /* Port */
 
   /* Bind to the local address */
   if (bind(sock, (struct sockaddr *)&echoServAddr, sizeof(echoServAddr)) < 0)
