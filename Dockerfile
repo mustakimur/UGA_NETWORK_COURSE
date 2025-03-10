@@ -5,4 +5,4 @@ RUN apt-get update && \
 
 WORKDIR /home/
 
-CMD [ "/bin/sh" ]
+CMD [ "/bin/bash" ]

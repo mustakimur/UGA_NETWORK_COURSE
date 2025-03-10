@@ -14,6 +14,8 @@ void HandleTCPClient(int clntSocket) {
   if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 0)) < 0)
     DieWithError("recv() failed");
 
+  sleep(20); /* Simulate processing time */
+
   /* Send received string and receive again until end of transmission */
   while (recvMsgSize > 0) /* zero indicates end of transmission */
   {

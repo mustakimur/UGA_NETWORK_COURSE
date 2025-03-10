@@ -1,3 +1,5 @@
+all: server client other
+
 server:
 	gcc -o UDPEchoServer UDPEchoServer-SIGIO.c DieWithError.c
 
@@ -6,3 +8,7 @@ client:
 
 other:
 	gcc -o Sample SigAction.c DieWithError.c
+
+clean:
+	rm -f UDPEchoServer UDPEchoClient Sample
+	rm -f *.o
