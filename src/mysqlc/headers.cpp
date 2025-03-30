@@ -16,8 +16,8 @@ int main(void) {
     exit(1);
   }
 
-  if (mysql_real_connect(con, "localhost", "mustakim", "mustakimsql", "mydb",
-                         0, NULL, 0) == NULL) {
+  if (mysql_real_connect(con, "localhost", "mustakim", "mustakimsql", "mydb", 0,
+                         NULL, 0) == NULL) {
     finish_with_error(con);
   }
 
