@@ -1,45 +1,57 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 
-typedef struct Item {
-  char name[100];
-  char ip[32];
-  int port;
-} data_t;
+#define SHM_SIZE 1024 // Shared memory size
 
 int main() {
-  int shm_id;
-  key_t key = 1234;
-  data_t *data[10];
-  unsigned int size = sizeof(data) * 10;
+  int shmid;
+  char *shared_memory;
+  key_t key = 1234; // Unique key for shared memory
 
-  shm_id = shmget(key, size, IPC_CREAT | IPC_EXCL | 0666);
-
-  *data = (data_t *)shmat(shm_id, 0, 0);
-
-  data[0] = malloc(sizeof(data));
-  data[1] = malloc(sizeof(data));
-  strcpy(data[0]->name, "user1");
-  strcpy(data[1]->name, "user2");
-
-  printf("%s\n", data[0]->name);
-  printf("%s\n", data[1]->name);
-
-  int pid = fork();
-
-  strcpy(data[1]->name, "user3");
-
-  if (pid > 0) {
-    sleep(1);
+  // Create shared memory
+  shmid = shmget(key, SHM_SIZE, IPC_CREAT | IPC_EXCL | 0666);
+  if (shmid == -1) {
+    perror("shmget failed");
+    exit(1);
   }
-  if (pid == 0) {
-    printf("%s\n", data[0]->name);
-    printf("%s\n", data[1]->name);
+
+  // Attach shared memory
+  shared_memory = (char *)shmat(shmid, NULL, 0);
+  if (shared_memory == (char *)-1) {
+    perror("shmat failed");
+    exit(1);
+  }
+
+  // Initialize shared memory
+  strcpy(shared_memory, "Initial Data from Parent");
+
+  pid_t pid = fork(); // Create child process
+
+  if (pid < 0) {
+    perror("fork failed");
+    exit(1);
+  }
+
+  if (pid == 0) { // Child process
+    sleep(2);     // Delay to let parent write first
+    printf("Child reads: %s\n", shared_memory);
+    strcpy(shared_memory, "Updated Data from Child");
+    printf("Child updates shared memory.\n");
+    shmdt(shared_memory); // Detach
     exit(0);
+  } else { // Parent process
+    sleep(1);
+    printf("Parent wrote: %s\n", shared_memory);
+    sleep(3);
+    printf("Parent sees after child update: %s\n", shared_memory);
+    shmdt(shared_memory); // Detach
+
+    // Remove shared memory after child finishes
+    shmctl(shmid, IPC_RMID, NULL);
   }
 
   return 0;
