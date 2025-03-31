@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
   if (argc != 3) /* Test for correct number of arguments */
   {
     fprintf(stderr, "Usage: %s <Multicast IP> <Multicast Port>\n", argv[0]);
+    // ./MulticastReceiver 224.0.0.0 3300
     exit(1);
   }
 

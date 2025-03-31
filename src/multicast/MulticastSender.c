@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr,
             "Usage:  %s <Multicast Address> <Port> <Send String> [<TTL>]\n",
             argv[0]);
+    // ./MulticastSender 224.0.0.0 3300 "hello" 3
     exit(1);
   }
 
