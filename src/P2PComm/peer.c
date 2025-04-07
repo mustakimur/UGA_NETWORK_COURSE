@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sys/select.h>
 
 void sending();
 void receiving(int client_fd);
@@ -62,7 +63,6 @@ int main(int argc, char const *argv[]) {
          "message\n0.Quit\n");
   printf("\nEnter choice:");
   do {
-
     scanf("%d", &ch);
     switch (ch) {
     case 1:
@@ -151,7 +151,6 @@ void receiving(int client_fd) {
 
     for (int i = 0; i < FD_SETSIZE; i++) {
       if (FD_ISSET(i, &ready_sockets)) {
-
         if (i == client_fd) {
           int client_socket;
 
